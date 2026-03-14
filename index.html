@@ -5,32 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Danzo Store - Danzo Official</title>
     <script src="https://cdn.tailwindcss.com"></script>
-<style>
-        /* CSS ASLI DANZO - JANGAN DIHAPUS */
+    <style>
+        /* CSS untuk Modal Fitur */
+        #modalFitur {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #modalFitur img {
+            max-width: 95%;
+            max-height: 85vh;
+            border-radius: 15px;
+            border: 2px solid #3b82f6;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+        }
+
+        #fullScreenQR {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #fullScreenQR img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 20px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.2);
+        }
+
         body {
             background-color: #03270b;
             position: relative;
             overflow-x: hidden;
         }
 
-        @keyframes noise-move {
-            0% { transform: translate(0,0); }
-            10% { transform: translate(-1%, -1%); }
-            100% { transform: translate(0,0); }
-        }
-
-        /* --- ANIMASI NEON KARTU (DIUPDATE: LEBIH TEBEL & LAMBAT) --- */
         .card-neon {
             position: relative;
             background: #000000;
             border-radius: 12px;
             overflow: hidden;
             z-index: 1;
-            transition: transform 0.5s ease;
+            transition: all 0.5s ease;
         }
 
         .card-neon:hover {
-            transform: scale(1.03); /* Sedikit membesar pas di hover */
+            transform: scale(1.03);
         }
 
         .card-neon::before {
@@ -40,18 +71,14 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            /* Warna disesuaikan ijo/biru neon biar masuk ke tema Matrix */
             background: conic-gradient(transparent, #00ff41, #3b82f6, transparent 30%);
-            /* SPEED DIUBAH: 4s ke 8s biar lebih santai/lambat */
             animation: rotate 8s linear infinite; 
             z-index: -2;
         }
 
         .card-neon::after {
             content: '';
-            position: absolute;
-            /* INSET DIUBAH: 2px ke 4px biar outline/border kelihatan lebih TEBEL */
-            inset: 4px; 
+            position: absolute;inset: 4px; 
             background: #000000;
             border-radius: 11px;
             z-index: -1;
@@ -62,31 +89,16 @@
             to { transform: rotate(360deg); }
         }
 
-        /* --- TOMBOL BELI NEON --- */
         .btn-neon-buy {
             background: linear-gradient(45deg, #3b82f6, #8b5cf6);
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
             transition: all 0.3s ease;
         }
 
-        .btn-neon-buy:hover {
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.8), 0 0 45px rgba(139, 92, 246, 0.4);
-            filter: brightness(1.2);
-            transform: scale(1.02);
-        }
-
-        /* --- SOSMED NEON --- */
-        .btn-sosmed {
-            transition: 0.3s;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-        }
-        
         .btn-sosmed:hover {
             box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
-            filter: brightness(1.1);
         }
 
-        /* --- STYLE POPUP MODAL --- */
         .modal {
             display: none; 
             position: fixed;
@@ -106,28 +118,13 @@
             max-width: 450px;
             padding: 24px;
             position: relative;
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
-        }
-
-        /* MODAL FULL SCREEN QRIS */
-        #fullScreenQR {
-            display: none; 
-            position: fixed; 
-            z-index: 200; 
-            inset: 0; 
-            background: rgba(0,0,0,0.95); 
-            align-items: center; 
-            justify-content: center;
-            cursor: pointer;
         }
 
         .pkg-btn-active {
             border-color: #3b82f6 !important;
             background: #1e1e2e !important;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
         }
 
-        /* --- FITUR BARU: NEON RAINBOW RESELLER --- */
         @keyframes neon-rainbow-border {
             0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; color: #ff0000; }
             20% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; color: #00ff00; }
@@ -141,13 +138,17 @@
             animation: neon-rainbow-border 3s linear infinite !important;
             border: 2px solid red !important;
             background: transparent !important;
-            transition: all 0.3s ease;
-            text-shadow: 0 0 5px rgba(255,255,255,0.2);
         }
 
-        .btn-neon-rainbow:hover {
-            filter: brightness(1.5);
-            transform: translateY(-2px);
+        .filter-btn {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .filter-btn.active {
+            background: #00ff41;
+            color: black;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+            border-color: #00ff41;
         }
 
         @keyframes hueRotate {
@@ -160,7 +161,9 @@
     </style>
 </head>
 <body class="text-white font-sans min-h-screen p-4 flex flex-col items-center">
+
 <canvas id="matrix-santai" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;"></canvas>
+
 <div class="mb-8 mt-4 text-center animate-rainbow">
     <div class="w-60 h-60 mx-auto rounded-2xl overflow-hidden border-2 border-green-500 shadow-[0_0_30px_rgba(34,197,94,0.8)]">
         <img src="OIG4.mHSh7.jpg" alt="Owner" class="w-full h-full object-cover">
@@ -170,134 +173,307 @@
     </h1>
 </div>
 
-<div class="flex flex-wrap justify-center gap-2 mb-10 max-w-4xl">
+<div class="flex gap-3 mb-6 bg-black/40 p-2 rounded-2xl border border-white/10 backdrop-blur-md">
+    <button onclick="filterProduct('all')" class="filter-btn active px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest">ALL</button>
+    <button onclick="filterProduct('root')" class="filter-btn px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest text-green-400 border-green-500/20">ANDROID ROOT</button>
+    <button onclick="filterProduct('no-root')" class="filter-btn px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest text-blue-400 border-blue-500/20">ANDROID NO ROOT</button>
+</div>
+
+<div class="flex gap-2 mb-10 max-w-4xl">
     <a href="index.html" class="px-6 py-2 bg-blue-600 rounded-lg font-bold shadow-[0_0_20px_rgba(37,99,235,0.8)] border border-blue-400">BUY CHEATS</a>
     <a href="reseller.html" class="btn-neon-rainbow px-6 py-2 rounded-lg font-bold uppercase tracking-widest">JOIN RESELLER</a>
 </div>
 
-<div class="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-6 w-full max-w-6xl px-4 md:px-4">
-    
-    <div class="card-neon relative">
-        <span class="absolute top-2 left-2 md:top-4 md:left-4 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] md:text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter">ROOT</span>
-        <span class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-red-600 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+<div id="product-container" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full max-w-7xl px-4">
+
+        <div class="card-neon relative product-card" data-category="no-root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-blue-500/50 text-blue-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-blue-500 rounded-full mr-1 animate-pulse"></span> ANDROID NO ROOT
+        </span>
+        <span class="absolute top-2 right-2 z-20 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
         <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
-            <div class="w-full aspect-square bg-black rounded-lg mb-3 md:mb-4 border border-gray-900 overflow-hidden">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
+                <img src="drip-noroot.jpg" class="w-full h-full object-cover">
+            </div>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">DRIP CLIENT NO ROOT</p>
+                    <button onclick="window.bukaModal('DRIP CLIENT NO ROOT', [
+    {durasi: '1 Day', nominal: '25k / 2$'},
+    {durasi: '7 Day', nominal: '90k / 8$'},
+    {durasi: '15 Day', nominal: '150k / 11$'},
+    {durasi: '30 Day', nominal: '250k / 15$'}
+])" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2 transition-transform active:scale-95">BELI</button>
+            <button onclick="window.lihatFitur('fitur-drip-noroot.jpg')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
+        </div>
+    </div>
+
+        <div class="card-neon relative product-card" data-category="no-root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-blue-500/50 text-blue-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-blue-500 rounded-full mr-1 animate-pulse"></span> ANDROID NO ROOT
+        </span>
+        <span class="absolute top-2 right-2 z-20 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+        <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
+                <img src="hg-noroot.jpg" class="w-full h-full object-cover">
+            </div>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">HG CHEATS NO ROOT</p>
+                    <button onclick="window.bukaModal('HG CHEATS NO ROOT', [
+    {durasi: '1 Day', nominal: '30k / 2$'},
+    {durasi: '10 Day', nominal: '100k / 8$'},
+])" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2 transition-transform active:scale-95">BELI</button>
+            <button onclick="window.lihatFitur('fitur-hg.jpg')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
+        </div>
+    </div>
+
+        <div class="card-neon relative product-card" data-category="root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-green-500 rounded-full mr-1 animate-pulse"></span> ANDROID ROOT
+        </span>
+        <span class="absolute top-2 right-2 z-20 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+        <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
+                <img src="drip.jpg" class="w-full h-full object-cover">
+            </div>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">DRIP CLIENT ROOT</p>
+            <button onclick="window.bukaModal('DRIP CLIENT ROOT', [
+    {durasi: '1 Day', nominal: '30k / 2$'},
+    {durasi: '7 Day', nominal: '100k / 8$'},
+    {durasi: '15 Day', nominal: '150k / 11$'},
+    {durasi: '30 Day', nominal: '250k / 15$'}
+])" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2 transition-transform active:scale-95">BELI</button>
+            <button onclick="window.lihatFitur('fitur-drip.jpg')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
+        </div>
+    </div>
+
+    <div class="card-neon relative product-card" data-category="root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-green-500 rounded-full mr-1 animate-pulse"></span> ANDROID ROOT
+        </span>
+        <span class="absolute top-2 right-2 z-20 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+        <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
                 <img src="matrix.jpg" class="w-full h-full object-cover">
             </div>
-            <p class="text-[10px] md:text-[10px] text-gray-400 mb-3 md:mb-4 font-bold uppercase text-center leading-tight">MATRIX PREMIUM</p>
-            <button onclick="bukaModal('MATRIX PREMIUM')" class="w-full py-2 md:py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px]">BELI</button>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">MATRIX PREMIUM</p>
+            <button onclick="window.bukaModal('MATRIX PREMIUM')" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2">BELI</button>
+            <button onclick="window.lihatFitur('https://youtu.be/-cFYujyeWeI')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
         </div>
     </div>
 
-    <div class="card-neon relative">
-        <span class="absolute top-2 left-2 md:top-4 md:left-4 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] md:text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter">ROOT</span>
-        <span class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-red-600 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+    <div class="card-neon relative product-card" data-category="root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-green-500 rounded-full mr-1 animate-pulse"></span> ANDROID ROOT
+        </span>
         <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
-            <div class="w-full aspect-square bg-black rounded-lg mb-3 md:mb-4 border border-gray-900 overflow-hidden">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
                 <img src="spotify.jpg" class="w-full h-full object-cover">
             </div>
-            <p class="text-[10px] md:text-[10px] text-gray-400 mb-3 md:mb-4 font-bold uppercase text-center leading-tight">SPOTIFY PREMIUM</p>
-            <button onclick="bukaModal('SPOTIFY PREMIUM')" class="w-full py-2 md:py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px]">BELI</button>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">SPOTIFY PREMIUM</p>
+            <button onclick="window.bukaModal('SPOTIFY PREMIUM')" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2">BELI</button>
+        <button onclick="window.lihatFitur('https://youtu.be/U6HgRpjYs5o')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
         </div>
     </div>
 
-    <div class="card-neon relative">
-        <span class="absolute top-2 left-2 md:top-4 md:left-4 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] md:text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter">ROOT</span>
-        <span class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-red-600 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+    <div class="card-neon relative product-card" data-category="root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-green-500 rounded-full mr-1 animate-pulse"></span> ANDROID ROOT
+        </span>
+        <span class="absolute top-2 right-2 z-20 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
         <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
-            <div class="w-full aspect-square bg-black rounded-lg mb-3 md:mb-4 border border-gray-900 overflow-hidden">
-                <img src="eagle.jpg" class="w-full h-full object-cover">
-            </div>
-            <p class="text-[10px] md:text-[10px] text-gray-400 mb-3 md:mb-4 font-bold uppercase text-center leading-tight">EAGLE CHEAT</p>
-            <button onclick="bukaModal('EAGLE CHEAT')" class="w-full py-2 md:py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px]">BELI</button>
-        </div>
-    </div>
-
-    <div class="card-neon relative">
-        <span class="absolute top-2 left-2 md:top-4 md:left-4 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] md:text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter">ROOT</span>
-        <span class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-red-600 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
-        <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
-            <div class="w-full aspect-square bg-black rounded-lg mb-3 md:mb-4 border border-gray-900 overflow-hidden">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
                 <img src="br.jpg" class="w-full h-full object-cover">
             </div>
-            <p class="text-[10px] md:text-[10px] text-gray-400 mb-3 md:mb-4 font-bold uppercase text-center leading-tight">BR PREMIUM</p>
-            <button onclick="bukaModal('BR PREMIUM')" class="w-full py-2 md:py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px]">BELI</button>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">BR PREMIUM</p>
+            <button onclick="window.bukaModal('BR PREMIUM')" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2">BELI</button>
+            <button onclick="window.lihatFitur('https://youtu.be/Sd64dK5dGtw')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
         </div>
     </div>
 
-    <div class="card-neon relative">
-        <span class="absolute top-2 left-2 md:top-4 md:left-4 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] md:text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter">ROOT</span>
-        <span class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-red-600 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+    <div class="card-neon relative product-card" data-category="root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-green-500 rounded-full mr-1 animate-pulse"></span> ANDROID ROOT
+        </span>
+        <span class="absolute top-2 right-2 z-20 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
         <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
-            <div class="w-full aspect-square bg-black rounded-lg mb-3 md:mb-4 border border-gray-900 overflow-hidden">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
                 <img src="xtffhx.jpg" class="w-full h-full object-cover">
             </div>
-            <p class="text-[10px] md:text-[10px] text-gray-400 mb-3 md:mb-4 font-bold uppercase text-center leading-tight">XTFFHX MOD</p>
-            <button onclick="bukaModal('XTFFHX MOD')" class="w-full py-2 md:py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px]">BELI</button>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">XTFFHX MOD</p>
+            <button onclick="window.bukaModal('XTFFHX MOD')" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2">BELI</button>
+            <button onclick="window.lihatFitur('https://youtu.be/ER9dZLfnOqA')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
         </div>
     </div>
 
-    <div class="card-neon relative">
-        <span class="absolute top-2 left-2 md:top-4 md:left-4 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] md:text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter">ROOT</span>
-        <span class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-red-600 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+    <div class="card-neon relative product-card" data-category="root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-green-500 rounded-full mr-1 animate-pulse"></span> ANDROID ROOT
+        </span>
+        <span class="absolute top-2 right-2 z-20 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
         <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
-            <div class="w-full aspect-square bg-black rounded-lg mb-3 md:mb-4 border border-gray-900 overflow-hidden">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
                 <img src="strick.jpg" class="w-full h-full object-cover">
             </div>
-            <p class="text-[10px] md:text-[10px] text-gray-400 mb-3 md:mb-4 font-bold uppercase text-center leading-tight">STRICK VIP</p>
-            <button onclick="bukaModal('STRICK VIP')" class="w-full py-2 md:py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px]">BELI</button>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">STRICK VIP</p>
+            <button onclick="window.bukaModal('STRICK VIP')" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2">BELI</button>
+            <button onclick="window.lihatFitur('https://youtu.be/YNeoOSvaUXg')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
         </div>
     </div>
 
-    <div class="card-neon relative">
-        <span class="absolute top-2 left-2 md:top-4 md:left-4 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] md:text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter">ROOT</span>
-        <span class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-red-600 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+    <div class="card-neon relative product-card" data-category="root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-green-500 rounded-full mr-1 animate-pulse"></span> ANDROID ROOT
+        </span>
+        <span class="absolute top-2 right-2 z-20 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
         <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
-            <div class="w-full aspect-square bg-black rounded-lg mb-3 md:mb-4 border border-gray-900 overflow-hidden">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
                 <img src="lk.jpg" class="w-full h-full object-cover">
             </div>
-            <p class="text-[10px] md:text-[10px] text-gray-400 mb-3 md:mb-4 font-bold uppercase text-center leading-tight">LK MODS</p>
-            <button onclick="bukaModal('LK MODS')" class="w-full py-2 md:py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px]">BELI</button>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">LK MODS</p>
+            <button onclick="window.bukaModal('LK MODS')" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2">BELI</button>
+            <button onclick="window.lihatFitur('https://youtu.be/gOBd2ehxEZI')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
         </div>
     </div>
 
-    <div class="card-neon relative">
-        <span class="absolute top-2 left-2 md:top-4 md:left-4 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] md:text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter">ROOT</span>
-        <span class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-red-600 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+    <div class="card-neon relative product-card" data-category="root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-green-500 rounded-full mr-1 animate-pulse"></span> ANDROID ROOT
+        </span>
+        <span class="absolute top-2 right-2 z-20 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
         <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
-            <div class="w-full aspect-square bg-black rounded-lg mb-3 md:mb-4 border border-gray-900 overflow-hidden">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
                 <img src="reaper.jpg" class="w-full h-full object-cover">
             </div>
-            <p class="text-[10px] md:text-[10px] text-gray-400 mb-3 md:mb-4 font-bold uppercase text-center leading-tight">REAPER VIP</p>
-            <button onclick="bukaModal('REAPER VIP')" class="w-full py-2 md:py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px]">BELI</button>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">REAPER VIP</p>
+            <button onclick="window.bukaModal('REAPER VIP')" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2">BELI</button>
+            <button onclick="window.lihatFitur('fitur-reaper.jpg')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
         </div>
     </div>
 
-    <div class="card-neon relative">
-        <span class="absolute top-2 left-2 md:top-4 md:left-4 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] md:text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter">ROOT</span>
-        <span class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-red-600 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+    <div class="card-neon relative product-card" data-category="root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-green-500 rounded-full mr-1 animate-pulse"></span> ANDROID ROOT
+        </span>
+        <span class="absolute top-2 right-2 z-20 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
         <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
-            <div class="w-full aspect-square bg-black rounded-lg mb-3 md:mb-4 border border-gray-900 overflow-hidden">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
                 <img src="beyond.jpg" class="w-full h-full object-cover">
             </div>
-            <p class="text-[10px] md:text-[10px] text-gray-400 mb-3 md:mb-4 font-bold uppercase text-center leading-tight">BEYOND MODS</p>
-            <button onclick="bukaModal('BEYOND MODS')" class="w-full py-2 md:py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px]">BELI</button>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">BEYOND MODS</p>
+            <button onclick="window.bukaModal('BEYOND MODS')" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2">BELI</button>
+            <button onclick="window.lihatFitur('fitur-beyond.jpg')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
         </div>
     </div>
 
-    <div class="card-neon relative">
-        <span class="absolute top-2 left-2 md:top-4 md:left-4 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] md:text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-tighter">ROOT</span>
-        <span class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-red-600 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
+    <div class="card-neon relative product-card" data-category="root">
+        <span class="absolute top-2 left-2 z-20 bg-black/80 border border-green-500/50 text-green-400 text-[7px] font-black px-2 py-1 rounded-md uppercase tracking-wider">
+            <span class="inline-block w-1 h-1 bg-green-500 rounded-full mr-1 animate-pulse"></span> ANDROID ROOT
+        </span>
+        <span class="absolute top-2 right-2 z-20 bg-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow-lg">FF</span>
         <div class="p-3 md:p-4 flex flex-col items-center relative z-10">
-            <div class="w-full aspect-square bg-black rounded-lg mb-3 md:mb-4 border border-gray-900 overflow-hidden">
+            <div class="w-full aspect-square bg-black rounded-lg mb-3 border border-gray-900 overflow-hidden">
                 <img src="eleven.jpg" class="w-full h-full object-cover">
             </div>
-            <p class="text-[10px] md:text-[10px] text-gray-400 mb-3 md:mb-4 font-bold uppercase text-center leading-tight">ELEVEN VIP</p>
-            <button onclick="bukaModal('ELEVEN VIP')" class="w-full py-2 md:py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px]">BELI</button>
+            <p class="text-[10px] text-gray-400 mb-3 font-bold uppercase text-center">ELEVEN VIP</p>
+            <button onclick="window.bukaModal('ELEVEN VIP')" class="w-full py-2 btn-neon-buy rounded-lg font-bold uppercase text-[10px] mb-2">BELI</button>
+            <button onclick="window.lihatFitur('https://youtu.be/e_rqS6_l-YU')" class="w-full py-1.5 border border-blue-500/50 text-blue-400 rounded-lg font-black uppercase text-[9px] hover:bg-blue-500/10 transition">SEE FEATURES</button>
         </div>
     </div>
 
 </div>
+
+<script>
+    // Fungsi buat Filter Produk (All, Root, No Root)
+    function filterProduct(category) {
+        const buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        // Memastikan event berasal dari klik tombol
+        if (event) event.currentTarget.classList.add('active');
+
+        const cards = document.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            if (category === 'all' || card.getAttribute('data-category') === category) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+window.lihatFitur = (url) => {
+    const modal = document.getElementById('modalFitur');
+    const container = modal.querySelector('.relative');
+    
+    // Kita kasih onclick stopPropagation biar pas gambar/video diklik gak ngeclose
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        let videoId = url.split('v=')[1] || url.split('/').pop();
+        if(videoId.includes('&')) videoId = videoId.split('&')[0];
+
+        container.innerHTML = `
+            <div class="flex flex-col items-center justify-center w-full h-full" onclick="tutupSemua()">
+                <p class="text-white text-[10px] font-bold mb-2 animate-pulse uppercase">Klik area luar untuk menutup</p>
+                <div class="w-full max-w-[900px] aspect-video px-4" onclick="event.stopPropagation()">
+                    <iframe id="videoFitur" width="100%" height="100%" 
+                        src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" 
+                        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen 
+                        class="rounded-2xl border-2 border-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.5)]">
+                    </iframe>
+                </div>
+            </div>
+        `;
+    } else {
+        container.innerHTML = `
+            <div class="flex flex-col items-center justify-center w-full h-full" onclick="tutupSemua()">
+                <p class="text-white text-[10px] font-bold mb-2 animate-pulse uppercase">Klik area luar untuk menutup</p>
+                <img src="${url}" onclick="event.stopPropagation()" class="max-w-[95%] max-h-[85vh] rounded-2xl border-2 border-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.5)]">
+            </div>
+        `;
+    }
+    modal.style.display = 'flex';
+};
+
+window.tutupSemua = () => {
+    // 1. Sembunyiin semua modal
+    document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+    if(document.getElementById('fullScreenQR')) {
+        document.getElementById('fullScreenQR').style.display = 'none';
+    }
+
+    // 2. MATIIN SUARA VIDEO (Penting!)
+    const video = document.getElementById('videoFitur');
+    if (video) {
+        // Kita paksa src-nya jadi kosong biar koneksi ke YouTube putus & suara mati
+        video.src = ""; 
+        video.remove(); // Hapus element dari HTML biar bener-bener bersih
+    }
+};
+</script>
+
+<script>
+    const canvas = document.getElementById('matrix-santai');
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resize);
+    resize();
+    const chars = "010101DANZOSTORE010101";
+    const fontSize = 20;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = [];
+    for (let x = 0; x < columns; x++) { drops[x] = Math.random() * -100; }
+    function draw() {
+        ctx.fillStyle = "rgba(3, 7, 3, 0.15)"; 
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = fontSize + "px monospace";
+        for (let i = 0; i < drops.length; i++) {
+            const text = chars.charAt(Math.floor(Math.random() * chars.length));
+            ctx.fillStyle = "#004400"; 
+            if(Math.random() > 0.98) ctx.fillStyle = "#00ff41";
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.995) { drops[i] = 0; }
+            drops[i] += 0.5;
+        }
+    }
+    setInterval(draw, 50);
+</script>
 
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl mt-16 px-2">
     <div class="bg-[#0a0a0a] p-4 rounded-2xl border border-green-500/30 flex flex-col items-center text-center gap-3 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
@@ -309,7 +485,6 @@
             <p class="text-[15px] text-gray-500">Harga murah & kompetitif</p>
         </div>
     </div>
-
     <div class="bg-[#0a0a0a] p-4 rounded-2xl border border-yellow-500/30 flex flex-col items-center text-center gap-3 shadow-[0_0_15px_rgba(234,179,8,0.1)]">
         <div class="w-12 h-12 flex items-center justify-center bg-yellow-500/10 rounded-full border border-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]">
             <span class="text-yellow-500 text-2xl">⚡</span>
@@ -319,8 +494,7 @@
             <p class="text-[15px] text-gray-400">Pengerjaan cepat</p>
         </div>
     </div>
-
-    <div class="bg-[#0a0a0a] p-4 rounded-2xl border border-blue-500/30 flex flex-col items-center text-center gap-3 shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+    <div class="bg-[#0a0a0a] p-4 rounded-2xl border border-blue-500/30 flex flex-col items-center text-center gap-3 shadow-[0_0_15px_rgba(59,130,246,0.15)]">
         <div class="w-12 h-12 flex items-center justify-center bg-blue-500/10 rounded-full border border-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
             <span class="text-blue-500 text-2xl">🔒</span>
         </div>
@@ -329,7 +503,6 @@
             <p class="text-[15px] text-gray-500">Trusted seller & aman</p>
         </div>
     </div>
-
     <div class="bg-[#0a0a0a] p-4 rounded-2xl border border-purple-500/30 flex flex-col items-center text-center gap-3 shadow-[0_0_15px_rgba(168,85,247,0.1)]">
         <div class="w-12 h-12 flex items-center justify-center bg-purple-500/10 rounded-full border border-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]">
             <span class="text-purple-500 text-2xl">🕒</span>
@@ -346,7 +519,7 @@
         <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.484 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.309 1.656zm6.224-3.82c1.516.903 3.136 1.379 4.82 1.379 5.176 0 9.389-4.213 9.392-9.387.002-2.507-.975-4.864-2.753-6.641-1.779-1.777-4.137-2.753-6.644-2.754-5.177 0-9.39 4.213-9.393 9.388-.001 1.761.491 3.477 1.424 4.976l-.998 3.645 3.748-.982zm11.332-6.864c-.287-.144-1.701-.84-1.964-.936-.264-.096-.456-.144-.648.144-.192.288-.744.936-.912 1.128-.168.192-.336.216-.624.072-.288-.144-1.215-.448-2.315-1.43-.856-.764-1.433-1.708-1.601-1.992-.168-.288-.018-.444.126-.588.13-.13.288-.336.432-.504.144-.168.192-.288.288-.48.096-.192.048-.36-.024-.504-.072-.144-.648-1.56-.888-2.136-.234-.56-.472-.484-.648-.492-.168-.008-.36-.008-.552-.008s-.504.072-.768.36c-.264.288-1.008.984-1.008 2.399s1.032 2.784 1.176 2.976c.144.192 2.031 3.102 4.921 4.35.687.297 1.224.474 1.643.607.69.219 1.319.188 1.815.114.552-.082 1.701-.696 1.944-1.368.243-.672.243-1.248.17-1.368-.073-.12-.267-.192-.553-.336z"/></svg>
         WHATSAPP
     </a>
-    <a href="https://wa.me/6281994562778" class="btn-sosmed flex items-center justify-center gap-3 bg-[#0088cc] py-4 rounded-2xl font-black text-base shadow-[0_0_15px_rgba(0,136,204,0.4)] hover:scale-[1.03] transition-transform">
+    <a href="https://t.me/DanzoStoreID" class="btn-sosmed flex items-center justify-center gap-3 bg-[#0088cc] py-4 rounded-2xl font-black text-base shadow-[0_0_15px_rgba(0,136,204,0.4)] hover:scale-[1.03] transition-transform">
         <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24"><path d="M11.944 0a12 12 0 1012 12A12.014 12.014 0 0011.944 0zm5.823 8.1c-.17 1.791-.913 6.162-1.291 8.181-.16.854-.473 1.14-.778 1.169-.663.062-1.168-.436-1.809-.856-1.003-.658-1.569-1.068-2.544-1.71-.1.011-.19.018-.28.026-.145.012-.29.022-.44.029l.01-.01c-.1-.01-.19-.01-.29-.02.04-.01.07-.02.11-.03-1.127-.74-2.454-1.614-2.531-1.666-.8-.54-1.272-1.169-.434-1.748l.044-.03c1.171-.787 9.176-6.176 9.537-6.42.361-.244.484-.337.663-.337.18 0 .405.093.444.444.039.351.018.784-.022.988z"/></svg>
         TELEGRAM
     </a>
@@ -361,33 +534,8 @@
         <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_ovo_purple.svg" class="h-8 bg-white p-2 rounded-lg">
     </div>
 </div>
-<div class="w-full max-w-4xl mt-16 bg-[#050505] border border-blue-500/30 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.15)] backdrop-blur-md">
-    <div class="bg-gradient-to-r from-blue-900/40 to-purple-900/40 p-4 text-center border-b border-blue-500/30">
-        <h3 class="text-xs font-black tracking-[0.3em] text-blue-400 uppercase animate-pulse">
-            Realtime Transaction Database
-        </h3>
-    </div>
-    <div class="overflow-x-auto">
-        <table class="w-full text-[11px] text-left border-collapse">
-<thead>
-    <tr class="bg-white/5 text-gray-400 uppercase border-b border-white/10">
-        <th class="p-4 text-center">Time</th>
-        <th class="p-4">Customer</th>
-        <th class="p-4">Item</th>
-        <th class="p-4 text-center">Price</th>
-        <th class="p-4 text-right">Status</th>
-    </tr>
-</thead>
-<tbody id="live-db-body">
-    </tbody>
-            <tbody id="live-db-body">
-                <tr>
-                    <td colspan="4" class="p-10 text-center text-gray-600 italic tracking-widest animate-pulse">
-                        Connecting to Danzo Secure Server...
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
+
     </div>
 </div>
 <footer class="mt-10 text-gray-600 text-[10px] uppercase tracking-widest text-center">
@@ -405,126 +553,50 @@
     s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
-    <script>
-    const canvas = document.getElementById('matrix-santai');
-    const ctx = canvas.getContext('2d');
-
-    function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    // Karakter yang simpel aja biar gak pusing
-    const chars = "010101DANZOSTORE010101";
-    const fontSize = 20; // Ukuran teks agak kecil biar rapi
-    const columns = Math.floor(canvas.width / fontSize);
-
-    // Array drops
-    const drops = [];
-    for (let x = 0; x < columns; x++) {
-        // Start di posisi acak banget biar gak barengan jatuhnya
-        drops[x] = Math.random() * -100; 
-    }
-
-    function draw() {
-        // Efek trail yang lebih gelap biar bersih
-        ctx.fillStyle = "rgba(3, 7, 3, 0.15)"; 
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.font = fontSize + "px monospace";
-
-        for (let i = 0; i < drops.length; i++) {
-            // Cuma gambar kalau angka random kecil (biar teksnya sedikit/jarang)
-            const text = chars.charAt(Math.floor(Math.random() * chars.length));
-            
-            // Kasih warna ijo redup biar gak nyolok
-            ctx.fillStyle = "#004400"; 
-            
-            // Kadang-kadang kasih warna ijo terang buat efek "sparkle"
-            if(Math.random() > 0.98) ctx.fillStyle = "#00ff41";
-
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-            // Reset ke atas kalau udah lewat bawah, tapi kasih delay random yang lama
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.995) {
-                drops[i] = 0;
-            }
-
-            // Kecepatan gerak (Gue bikin 0.5 biar bener-bener pelan)
-            drops[i] += 0.5;
-        }
-    }
-
-    // Update frame setiap 50ms (Tadinya 33ms, gue lambatin jadi 50ms)
-    setInterval(draw, 50);
-</script>
     </body>
 </html>
 
-<div id="modalPaket" class="modal">
-    <div class="modal-content text-center">
+<div id="modalPaket" class="modal" onclick="tutupSemua()">
+    <div class="modal-content text-center" onclick="event.stopPropagation()">
         <button onclick="tutupSemua()" class="absolute top-4 right-4 text-gray-500 hover:text-white transition">✕</button>
         <h2 id="modalProductTitle" class="text-blue-400 font-bold mb-4 tracking-widest uppercase text-sm">PILIH PAKET</h2>
-        
-        <p class="text-[10px] text-gray-500 text-left mb-1 uppercase font-black">Username Pembeli:</p>
-        <input type="text" id="userInput" class="w-full bg-[#16161d] border border-gray-800 rounded-lg p-3 mb-4 text-sm text-white outline-none focus:border-blue-500 transition shadow-inner" placeholder="Contoh: DanzoXXXX">
-
+        <input type="text" id="userInput" class="w-full bg-[#16161d] border border-gray-800 rounded-lg p-3 mb-4 text-sm text-white outline-none focus:border-blue-500 transition" placeholder="Username Pembeli: DanzoXXXX">
         <div class="grid grid-cols-2 gap-3 mb-6">
-            <button onclick="pilihHarga(this, '15k / 1$')" class="pkg-btn bg-[#1a1a24] border border-gray-800 p-3 rounded-lg text-[11px] font-bold hover:border-blue-500 transition">1 Day <span class="block text-gray-500">15k/1$</span></button>
-            <button onclick="pilihHarga(this, '30k / 2$')" class="pkg-btn bg-[#1a1a24] border border-gray-800 p-3 rounded-lg text-[11px] font-bold hover:border-blue-500 transition">3 Day <span class="block text-gray-500">30k/2$</span></button>
-            <button onclick="pilihHarga(this, '65k / 4$')" class="pkg-btn bg-[#1a1a24] border border-gray-800 p-3 rounded-lg text-[11px] font-bold hover:border-blue-500 transition">7 Day <span class="block text-gray-500">65k/4$</span></button>
-            <button onclick="pilihHarga(this, '90k / 4$')" class="pkg-btn bg-[#1a1a24] border border-gray-800 p-3 rounded-lg text-[11px] font-bold hover:border-blue-500 transition">10 Day <span class="block text-gray-500">90k/4$</span></button>
-            <button onclick="pilihHarga(this, '150k / 10$')" class="pkg-btn bg-[#1a1a24] border border-gray-800 p-3 rounded-lg text-[11px] font-bold hover:border-blue-500 transition">30 Day <span class="block text-gray-500">150k/10$</span></button>
+            <button onclick="pilihHarga(this, '15k / 1$')" class="pkg-btn bg-[#1a1a24] border border-gray-800 p-3 rounded-lg text-[11px] font-bold hover:border-blue-500">1 Day <span class="block text-gray-500">15k/1$</span></button>
+            <button onclick="pilihHarga(this, '30k / 2$')" class="pkg-btn bg-[#1a1a24] border border-gray-800 p-3 rounded-lg text-[11px] font-bold hover:border-blue-500">3 Day <span class="block text-gray-500">30k/2$</span></button>
+            <button onclick="pilihHarga(this, '65k / 4$')" class="pkg-btn bg-[#1a1a24] border border-gray-800 p-3 rounded-lg text-[11px] font-bold hover:border-blue-500">7 Day <span class="block text-gray-500">65k/4$</span></button>
+            <button onclick="pilihHarga(this, '100k / 6$')" class="pkg-btn bg-[#1a1a24] border border-gray-800 p-3 rounded-lg text-[11px] font-bold hover:border-blue-500">10 Day <span class="block text-gray-500">90k/6$</span></button>
+            <button onclick="pilihHarga(this, '150k / 10$')" class="pkg-btn bg-[#1a1a24] border border-gray-800 p-3 rounded-lg text-[11px] font-bold hover:border-blue-500">30 Day <span class="block text-gray-500">150k/10$</span></button>
         </div>
-        <button onclick="bukaQRIS()" class="w-full py-4 bg-blue-600 rounded-xl font-black text-sm tracking-widest shadow-lg hover:bg-blue-500 transition active:scale-95">BAYAR VIA QRIS</button>
+        <button onclick="bukaQRIS()" class="w-full py-4 bg-blue-600 rounded-xl font-black text-sm tracking-widest shadow-lg">BAYAR VIA QRIS</button>
     </div>
+</div>
+
+<div id="modalFitur" class="modal" onclick="tutupSemua()">
+    <div class="relative flex flex-col items-center justify-center w-full h-full" onclick="event.stopPropagation()">
+        </div>
 </div>
 
 <div id="modalQRIS" class="modal">
-    <div class="modal-content text-center border-green-500 shadow-[0_0_30px_rgba(34,197,94,0.2)] max-w-[380px]">
+    <div class="modal-content text-center border-green-500">
         <button onclick="tutupSemua()" class="absolute top-4 right-4 text-gray-500 hover:text-white transition">✕</button>
-        
-        <h2 class="text-green-500 font-bold mb-4 tracking-widest text-sm uppercase">SCAN QRIS</h2>
-
-        <div class="mb-4 p-3 bg-red-950/30 border border-red-500/40 rounded-lg text-left">
-            <div class="flex items-center gap-2 mb-1.5 text-red-500 font-bold text-[11px]">
-                <span>⚠️</span>
-                <span class="uppercase">Warning:</span>
-            </div>
-            <ul class="text-red-400/90 text-[10px] leading-relaxed space-y-0.5 font-medium">
-                <li>- Setelah pembayaran jangan lupa screenshot</li>
-                <li>- Kirim ke admin</li>
-                <li>- Langsung proses key</li>
-            </ul>
-        </div>
-
-        <h2 id="judulHarga" class="text-green-400 font-bold mb-4 tracking-widest text-xs uppercase">HARGA: -</h2>
-        
-        <div onclick="window.bukaFullQR()" class="bg-white p-1 rounded-2xl cursor-pointer shadow-xl mb-4 inline-block hover:scale-105 transition-transform">
-            <img id="qrisImage" src="photo_2026-02-28_15-27-14.jpg" class="w-56 h-56 object-contain">
-        </div>
-
-        <div id="flowBayar" class="flex flex-col gap-2">
-            <button id="btnDone" onclick="window.pushToDatabase()" class="bg-orange-500 py-3 rounded-xl font-black text-xs uppercase shadow-lg hover:bg-orange-400 transition text-black">
-                SUDAH BAYAR
-            </button>
-            
-            <button id="btnAdmin" onclick="window.hubungiAdmin()" class="hidden bg-green-600 py-3 rounded-xl font-black text-xs uppercase shadow-lg hover:bg-green-500 transition animate-bounce">
-                HUBUNGI ADMIN (KIRIM BUKTI)
-            </button>
-
-            <p id="infoBayar" class="mt-2 text-[9px] text-gray-500 italic uppercase font-bold tracking-tighter">
-                KLIK QRIS UNTUK MEMPERBESAR GAMBAR
-            </p>
+        <h2 id="judulHarga" class="text-green-400 font-bold mb-4 tracking-widest text-sm uppercase">HARGA: -</h2>
+        <div onclick="window.bukaFullQR()" class="bg-white p-1 rounded-2xl cursor-pointer mb-4 inline-block"><img id="qrisImage" src="photo_2026-02-28_15-27-14.jpg" class="w-56 h-56 object-contain"></div>
+        <div class="flex flex-col gap-2">
+            <button id="btnDone" onclick="window.pushToDatabase()" class="bg-blue-600 py-3 rounded-xl font-black text-xs uppercase">DONE (KLIK JIKA SUDAH BAYAR)</button>
+            <button id="btnAdmin" onclick="window.hubungiAdmin()" class="hidden bg-green-600 py-3 rounded-xl font-black text-xs uppercase animate-bounce">HUBUNGI ADMIN (KIRIM BUKTI)</button>
         </div>
     </div>
 </div>
 
-<div id="fullScreenQR" onclick="tutupFullQR()">
-    <img src="photo_2026-02-28_15-27-14.jpg" class="max-w-[95%] max-h-[90%] object-contain shadow-2xl border-4 border-white/20">
+<div id="modalFitur" onclick="this.style.display='none'">
+    <div class="relative flex flex-col items-center">
+        <p class="text-white text-[10px] font-bold mb-2 animate-pulse uppercase">Klik di mana saja untuk menutup</p>
+        <img id="imgFitur" src="">
+    </div>
 </div>
+
+<div id="fullScreenQR" onclick="tutupFullQR()"><img src="photo_2026-02-28_15-27-14.jpg"></div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
@@ -544,120 +616,117 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let produkTerpilih = "";
-    let hargaTerpilih = "";
-    let namaUser = "";
+    let produkTerpilih = ""; let hargaTerpilih = ""; let namaUser = "";
 
-    window.bukaModal = (namaProduk) => {
-        produkTerpilih = namaProduk;
-        document.getElementById('modalProductTitle').innerText = "BELI: " + namaProduk;
-        document.getElementById('modalPaket').style.display = 'flex';
-    };
+window.bukaModal = (namaProduk, daftarHarga = null) => {
+    produkTerpilih = namaProduk;
+    document.getElementById('modalProductTitle').innerText = "BELI: " + namaProduk;
+    
+    const containerHarga = document.querySelector('#modalPaket .grid');
+    containerHarga.innerHTML = ""; // Bersihin modal
+
+    // List Harga Standar (Buat yang panggil polosan/tanpa list)
+    const hargaStandar = [
+        {durasi: '1 Day', nominal: '15k / 1$'},
+        {durasi: '3 Day', nominal: '30k / 2$'},
+        {durasi: '7 Day', nominal: '65k / 4$'},
+        {durasi: '10 Day', nominal: '90k / 6$'},
+        {durasi: '30 Day', nominal: '150k / 10$'}
+    ];
+
+    // Tentukan mau pakai harga yang mana
+    const hargaYangDipakai = daftarHarga ? daftarHarga : hargaStandar;
+
+    // Gambar tombolnya ke modal
+    hargaYangDipakai.forEach(item => {
+        containerHarga.innerHTML += `
+            <button onclick="pilihHarga(this, '${item.nominal}')" 
+                class="pkg-btn bg-[#1a1a24] border border-gray-800 p-3 rounded-lg text-[11px] font-bold hover:border-blue-500 transition-all active:scale-95">
+                ${item.durasi} <span class="block text-gray-500 text-[9px] font-medium">${item.nominal}</span>
+            </button>
+        `;
+    });
+
+    document.getElementById('modalPaket').style.display = 'flex';
+};
 
     window.pilihHarga = (element, harga) => {
-        const buttons = document.querySelectorAll('.pkg-btn');
-        buttons.forEach(btn => btn.classList.remove('pkg-btn-active'));
+        document.querySelectorAll('.pkg-btn').forEach(btn => btn.classList.remove('pkg-btn-active'));
         element.classList.add('pkg-btn-active');
         hargaTerpilih = harga;
     };
 
     window.bukaQRIS = () => {
         namaUser = document.getElementById('userInput').value;
-        if (namaUser.trim() === "" || hargaTerpilih === "") {
-            alert("Isi Nama & Pilih Paket dulu, Sayang!");
-            return;
-        }
+        if (!namaUser || !hargaTerpilih) { alert("Isi Nama & Pilih Paket!"); return; }
         document.getElementById('modalPaket').style.display = 'none';
         document.getElementById('judulHarga').innerText = "HARGA: " + hargaTerpilih;
         document.getElementById('modalQRIS').style.display = 'flex';
     };
 
-    // --- BAGIAN SIMPAN DATA (SUDAH FIX BANYAK ORANG) ---
-// --- STEP 1: MASUKIN DATA KE DATABASE ---
     window.pushToDatabase = () => {
         const transRef = ref(db, 'transactions');
-        const newTrans = push(transRef);
         const waktuSekarang = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        set(newTrans, {
-            user: namaUser,
-            product: produkTerpilih,
-            price: hargaTerpilih,
-            status: "PENDING 🕒", // Status awal pending sebelum divalidasi admin
-            time: waktuSekarang,
-            timestamp: Date.now()
+        set(push(transRef), {
+            user: namaUser, product: produkTerpilih, price: hargaTerpilih, status: "PENDING 🕒", time: waktuSekarang, timestamp: Date.now()
         }).then(() => {
-            // Animasi ganti tombol
             document.getElementById('btnDone').classList.add('hidden');
             document.getElementById('btnAdmin').classList.remove('hidden');
-            document.getElementById('infoBayar').innerText = "Data tersimpan! Sekarang chat admin untuk proses.";
-            document.getElementById('infoBayar').classList.replace('text-gray-500', 'text-green-400');
-            
-            alert("Data berhasil dicatat! Silahkan klik Hubungi Admin.");
         });
     };
 
-    // --- STEP 2: CHAT ADMIN ---
     window.hubungiAdmin = () => {
-        const pesanWA = `Halo Danzo! Saya ${namaUser} sudah bayar.\n\nProduk: ${produkTerpilih}\nPaket: ${hargaTerpilih}\nStatus: SUDAH KLIK DONE (Cek Database)`;
+        const pesanWA = `Halo Danzo! Saya ${namaUser} sudah bayar.\nProduk: ${produkTerpilih}\nPaket: ${hargaTerpilih}`;
         window.location.href = `https://wa.me/6281994562778?text=${encodeURIComponent(pesanWA)}`;
     };
 
-    // --- UPDATE TABEL REALTIME ---
-    const tableBody = document.getElementById('live-db-body');
-    const q = query(ref(db, 'transactions'), limitToLast(10));
-    
-    onValue(q, (snapshot) => {
+    onValue(query(ref(db, 'transactions'), limitToLast(10)), (snapshot) => {
+        const tableBody = document.getElementById('live-db-body');
         tableBody.innerHTML = "";
-        let logs = [];
-        snapshot.forEach(child => {
-            logs.push(child.val());
-        });
-        
-        // Balik urutan biar yang terbaru di paling atas
+        let logs = []; snapshot.forEach(child => logs.push(child.val()));
         logs.reverse().forEach(item => {
             tableBody.innerHTML += `
-                <tr class="border-b border-white/5 hover:bg-blue-500/5 transition duration-300">
-                    <td class="p-4 text-gray-500 text-[9px]">${item.time || 'Barusan'}</td>
+                <tr class="border-b border-white/5 hover:bg-blue-500/5 transition">
+                    <td class="p-4 text-gray-500 text-[9px]">${item.time}</td>
                     <td class="p-4 font-bold text-blue-400">${item.user}</td>
                     <td class="p-4 text-gray-300 uppercase">${item.product}</td>
                     <td class="p-4 text-green-400 font-bold">${item.price}</td>
-                    <td class="p-4 text-right">
-                        <span class="bg-blue-600/20 text-blue-400 px-2 py-1 rounded-md border border-blue-500/30 font-bold text-[9px]">
-                            ${item.status}
-                        </span>
-                    </td>
-                </tr>
-            `;
+                    <td class="p-4 text-right"><span class="bg-blue-600/20 text-blue-400 px-2 py-1 rounded-md border border-blue-500/30 font-bold text-[9px]">${item.status}</span></td>
+                </tr>`;
         });
     });
-
+    window.bukaFullQR = () => document.getElementById('fullScreenQR').style.display = 'flex';
+    window.tutupFullQR = () => document.getElementById('fullScreenQR').style.display = 'none';
+</script>
+<script>
     window.tutupSemua = () => {
-        document.getElementById('modalPaket').style.display = 'none';
-        document.getElementById('modalQRIS').style.display = 'none';
-        if(document.getElementById('fullScreenQR')) document.getElementById('fullScreenQR').style.display = 'none';
-    };
-    
-    window.onclick = (e) => { if(e.target.classList.contains('modal')) tutupSemua(); };
-    // --- FIX FULLSCREEN QRIS ---
-    window.bukaFullQR = () => {
-        const fullQR = document.getElementById('fullScreenQR');
-        if (fullQR) fullQR.style.display = 'flex';
-    };
+        console.log("Menutup semua modal dan mematikan suara...");
 
-    window.tutupFullQR = () => {
-        const fullQR = document.getElementById('fullScreenQR');
-        if (fullQR) fullQR.style.display = 'none';
-    };
+        // 1. Sembunyiin semua elemen modal
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(m => {
+            m.style.display = 'none';
+        });
 
-    window.tutupSemua = () => {
-        document.getElementById('modalPaket').style.display = 'none';
-        document.getElementById('modalQRIS').style.display = 'none';
-        window.tutupFullQR(); // Pastikan fullscreen juga ketutup
-    };
-    
-    window.onclick = (e) => { 
-        if(e.target.classList.contains('modal')) window.tutupSemua(); 
+        const qris = document.getElementById('fullScreenQR');
+        if (qris) qris.style.display = 'none';
+
+        // 2. MATIIN SUARA (YouTube & Video)
+        // Cari semua iframe (YouTube) dan hapus src-nya
+        const iframes = document.querySelectorAll('iframe');
+        iframes.forEach(iframe => {
+            iframe.src = ""; // Putus suara YouTube
+            iframe.remove(); // Hapus dari layar
+        });
+
+        // Cari semua video (.mp4) dan stop
+        const videos = document.querySelectorAll('video');
+        videos.forEach(v => {
+            v.pause();
+            v.src = "";
+            v.load();
+            v.remove();
+        });
     };
 </script>
 </body>
